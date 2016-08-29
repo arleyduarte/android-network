@@ -4,9 +4,6 @@
  ******************************************************************************/
 package com.amdp.android.network;
 
-import android.util.Log;
-
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -29,10 +26,8 @@ import javax.net.ssl.HttpsURLConnection;
  */
 class ServerCommunication {
 
-    private static final String TAG = ServerCommunication.class.getSimpleName();
     private String serviceUrl;
     private boolean isNeedSession = false;
-
 
     public ServerCommunication(String url, boolean isNeedSession) {
         this.isNeedSession = isNeedSession;
@@ -66,7 +61,8 @@ class ServerCommunication {
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                InputStream inStream = new GZIPInputStream(conn.getInputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
                 while ((line = br.readLine()) != null) {
                     response += line;
                 }
@@ -80,13 +76,7 @@ class ServerCommunication {
             e.printStackTrace();
         }
 
-
-
-
-        Log.d(TAG, "Raw RESPONSE : " + response);
         apiResponse.setRawResponse(response);
-
-
         return apiResponse;
     }
 
@@ -106,90 +96,6 @@ class ServerCommunication {
         }
 
         return result.toString();
-    }
-
-    /*
-    protected APIResponse getAPIResponse(List<NameValuePair> nameValuePairs, HttpMethod method) {
-        APIResponse apiResponse = new APIResponse();
-        String rawResponse = "";
-        try {
-
-            Log.d(TAG, "Request: " + ServerURL);
-
-
-            URL url = new URL(ServerURL);
-            HttpURLConnection client = (HttpURLConnection) url.openConnection();
-
-
-            client.setRequestProperty("Key", "Value");
-            client.setDoOutput(true);
-
-
-            //New
-            client.setRequestProperty("Accept-Encoding", "gzip");
-
-            if (isNeedSession) {
-                Session session = Session.getInstance();
-                client.setRequestProperty("Authorization", "Bearer " + session.getAccessToken());
-            }
-
-
-            OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-
-            outputPost.flush();
-            outputPost.close();
-
-
-            client.setFixedLengthStreamingMode(outputPost.getBytes().length);
-            client.setChunkedStreamingMode(0);
-
-
-            HttpResponse response = client.execute(httpClient);
-
-            InputStream inputStream = response.getEntity().getContent();
-            Header contentEncoding = response.getFirstHeader("Content-Encoding");
-            if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-                inputStream = new GZIPInputStream(inputStream);
-            }
-
-
-            rawResponse = convertStreamToString(inputStream);
-
-            Log.d(TAG, "Raw RESPONSE : " + rawResponse);
-            apiResponse.getStatus().setStatusCode(response.getStatusLine().getStatusCode());
-            apiResponse.setRawResponse(rawResponse);
-
-        } catch (Exception e) {
-            Log.d(TAG, "Error IO Exception");
-
-            apiResponse.getStatus().setErrorCode(APIErrors.CONNECTION_ERROR);
-        }
-
-        return apiResponse;
-    }
-*/
-
-    //-----------------------------------------------------------
-
-    private static String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-
-        String line = "";
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
     }
 
 
