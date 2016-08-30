@@ -38,6 +38,7 @@ class ServerCommunication {
         APIResponse apiResponse = new APIResponse();
         URL url;
         String response = "";
+        int responseCode = 0;
         try {
             url = new URL(serviceUrl);
 
@@ -49,6 +50,11 @@ class ServerCommunication {
             conn.setDoOutput(true);
             conn.setRequestProperty("Accept-Encoding", "gzip");
 
+
+            if (isNeedSession) {
+                conn.setRequestProperty("Authorization", "Bearer " + Session.getInstance().getAccessToken());
+            }
+
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
             writer.write(getPostDataString(postDataParams));
@@ -56,7 +62,7 @@ class ServerCommunication {
             writer.flush();
             writer.close();
             os.close();
-            int responseCode = conn.getResponseCode();
+            responseCode = conn.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
@@ -72,6 +78,7 @@ class ServerCommunication {
 
             }
         } catch (Exception e) {
+            apiResponse.getStatus().setErrorCode(responseCode);
             e.printStackTrace();
         }
 

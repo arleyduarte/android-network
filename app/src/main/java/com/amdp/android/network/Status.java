@@ -14,7 +14,7 @@ public class Status {
 
     private int statusCode;
     private String error = "";
-    private String errorCode;
+    private int errorCode;
 
     public boolean isSuccess() {
         boolean success = false;
@@ -40,11 +40,11 @@ public class Status {
         this.error = error;
     }
 
-    public String getErrorCode() {
+    public int getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
 }

@@ -25,7 +25,8 @@ public class Session {
 
     public void setAccessToken(String accessToken, Context context) {
         this.accessToken = accessToken;
-        save(context);
+        if(context != null)
+            save(context);
     }
 
     public void restore(Context context){
