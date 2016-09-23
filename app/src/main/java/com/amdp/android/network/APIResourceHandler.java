@@ -33,8 +33,8 @@ public abstract class APIResourceHandler {
     }
 
 
-    public HashMap<String, String> getValueParams() {
-        return null;
+    public HashMap<String, String> getBodyParams() {
+        return new HashMap<>();
     }
 
     protected ResponseActionDelegate getResponseActionDelegate() {
