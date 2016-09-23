@@ -40,7 +40,7 @@ class ServerCommunicationAsyncTask extends AsyncTask<Void, Void, APIResponse> {
     @Override
     protected APIResponse doInBackground(Void... params) {
         try{
-            return serverCommunication.getAPIResponse(resourceHandler.getValueParams(), resourceHandler.getHttpMethod());
+            return serverCommunication.getAPIResponse(resourceHandler.getBodyParams(), resourceHandler.getHttpMethod());
 
         }catch (Exception e){
             Log.e(TAG, e.getMessage()) ;
