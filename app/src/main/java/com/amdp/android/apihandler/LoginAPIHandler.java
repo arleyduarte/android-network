@@ -10,8 +10,8 @@ import java.util.HashMap;
  */
 public class LoginAPIHandler extends APIResourceHandler {
 
-    private String username;
-    private String password;
+    protected String username;
+    protected String password;
 
     public LoginAPIHandler(String username, String password) {
         this.username = username;
