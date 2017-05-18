@@ -6,7 +6,7 @@ import com.google.gson.Gson;
  * Created by Arley Mauricio Duarte on 5/17/17.
  */
 
-public abstract class User {
+public  class User {
 
     private String userId = "";
     private String name = "";
