@@ -64,6 +64,7 @@ class ServerCommunication {
             os.close();
             responseCode = conn.getResponseCode();
 
+
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
                 InputStream inStream = new GZIPInputStream(conn.getInputStream());
